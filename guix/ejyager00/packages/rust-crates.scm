@@ -16,7 +16,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (gnu packages rust-crates)
+(define-module (ejyager00 packages rust-crates)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix download)
