@@ -1,11 +1,14 @@
 (define-module (ejyager00 packages editors)
   #:use-module (guix packages)
-  #:use-module (guix git-download)
-  #:use-module (guix build-system cargo)
+  #:use-module (guix download)
+  #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages tls)
-  #:use-module (guix gexp))
+  #:use-module (nonguix build-system binary)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages version-control)
+  #:use-module (gnu packages compression))
 
 (define-public fresh-editor
   (package
@@ -13,30 +16,31 @@
     (version "0.4.5")
     (source
      (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/sinelaw/fresh")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256 (base32 "158lvsf5kki92s3h8hbkyfzw9ca7ikaskyrhgnwdccgws77d7k84"))))
-    (build-system cargo-build-system)
+       (method url-fetch)
+       (uri (string-append "https://github.com/sinelaw/fresh/releases/download/v"
+                           version "/fresh-editor-x86_64-unknown-linux-gnu.tar.xz"))
+       (file-name (string-append name "-" version ".tar.xz"))
+       (sha256 (base32 "0a9b6c1mgj8wmidx5cqfyyw0xghlz9aah8rsbvga4h4hlbsiijki"))))
+    (build-system binary-build-system)
+    (supported-systems '("x86_64-linux"))
     (arguments
-     (list #:install-source? #f
-           #:tests? #f
-           ;; Workspace: adjust to the actual binary crate path.
-           #:cargo-install-paths ''("crates/fresh")
-           #:phases
-           #~(modify-phases %standard-phases
-               (add-before 'build 'relax-msrv
-                 (lambda _
-                   (substitute* (find-files "." "^Cargo\\.toml$")
-                     (("^rust-version = .*") "")))))))
-    (inputs
-     (cargo-inputs 'fresh-editor
-                   #:module '(ejyager00 packages rust-crates)))
-    (native-inputs (list pkg-config))
+     (list
+      #:patchelf-plan
+      #~'(("fresh" ("glibc" "gcc" "xz")))
+      #:install-plan
+      #~'(("fresh" "bin/"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap
+            (lambda* (#:key inputs #:allow-other-keys)
+              (wrap-program (string-append #$output "/bin/fresh")
+                `("PATH" ":" prefix
+                  (,(string-append #$(this-package-input "git") "/bin")))))))))
+    (inputs (list `(,gcc "lib") glibc git xz))
     (home-page "https://getfresh.dev")
     (synopsis "Terminal-based IDE and text editor")
     (description
-     "Fresh is a terminal text editor with VS Code-style keybindings, mouse support, a command palette, LSP integration, and a TypeScript plugin system.")
+     "Fresh is a terminal text editor with VS Code-style keybindings, mouse
+support, a command palette, LSP integration, and a TypeScript plugin system.
+This package repackages the upstream prebuilt binary.")
     (license license:gpl2)))
