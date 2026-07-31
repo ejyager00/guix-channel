@@ -45,7 +45,6 @@
       #~(let ((path "opt/brave.com/brave-origin/"))
           (map (lambda (file) (string-append path file))
                '("brave"
-                 "brave-origin"
                  "chrome-management-service"
                  "chrome-sandbox"
                  "chrome_crashpad_handler"
