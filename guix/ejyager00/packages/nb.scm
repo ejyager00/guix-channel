@@ -2,6 +2,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system copy)
+  #:use-module (guix gexp)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages version-control))
 
@@ -15,7 +16,7 @@
        (uri (git-reference
              (url "https://github.com/xwmx/nb")
              (commit version)))
-       (sha256 (base32 "0000000000000000000000000000000000000000000000000000"))))
+       (sha256 (base32 "0g2bvrcl48y164jyg49kqm7b0hc7k1657wvmwqaqclipcbalphyd"))))
     (build-system copy-build-system)
     (arguments
      (list #:install-plan
