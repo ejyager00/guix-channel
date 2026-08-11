@@ -107,10 +107,14 @@
            gtk
            harfbuzz
            libexif
-           libglvnd
            libpng
            libva
            libxscrnsaver
+           ;; Guix's mesa is built without libglvnd, so it provides libEGL.so.1
+           ;; itself.  Listing libglvnd here (as nonguix's chrome.scm does)
+           ;; shadows it with glvnd's dispatch library, which finds no vendor
+           ;; JSON and fails eglInitialize -> no GPU rasterization, no WebGL.
+           mesa
            opus
            pciutils
            pipewire
