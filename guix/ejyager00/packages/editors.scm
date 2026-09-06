@@ -13,14 +13,14 @@
 (define-public fresh-editor
   (package
     (name "fresh-editor")
-    (version "0.4.9")
+    (version "0.4.10")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/sinelaw/fresh/releases/download/v"
                            version "/fresh-editor-x86_64-unknown-linux-gnu.tar.xz"))
        (file-name (string-append name "-" version ".tar.xz"))
-       (sha256 (base32 "1bs7nsnjlfp53jdzazmyvz1r17cj2f0d4b137szvn3z32jk30isz"))))
+       (sha256 (base32 "1wrwfq6ycxkhc0rmxbr7brasbak0m9c81a1zhpfhdx03bg9x6d22"))))
     (build-system binary-build-system)
     (supported-systems '("x86_64-linux"))
     (arguments
