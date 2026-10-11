@@ -11,8 +11,8 @@
   #:use-module (gnu packages pkg-config))
 
 (define-public porter
-  (let ((commit "3d6fd64f3f5eb5ec1c11ac608cb0a4dacbd0fb33")
-        (revision "0"))
+  (let ((commit "5e546294c8cced67dcb3ca82707c18462e9fab08")
+        (revision "1"))
     (package
       (name "porter")
       (version (git-version "0.1.0" revision commit))
@@ -24,7 +24,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "1y1351fccq62biwy0lhas72xld0r6bkyi0hqny0a5vha4l7cz3qi"))))
+          (base32 "0ik9ckqqdh9frzfix0wxnj93a1hfwgb0i9i27b0s2jdjjkb9khs4"))))
       (build-system meson-build-system)
       ;; The end-to-end tests (scripts/*-tests.sh) need a headless sway;
       ;; meson defines no tests of its own.
