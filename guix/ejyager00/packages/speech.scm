@@ -34,13 +34,13 @@ from.")
 (define-public python-phonemizer
   (package
     (name "python-phonemizer")
-    (version "3.4.0")
+    (version "3.6.0")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "phonemizer" version))
        (sha256
-        (base32 "1ssiyb8b6rcnmvc556cjc6fssq3j0ax7jqs6q0g6gg2h1jc32cp1"))))
+        (base32 "0qcj5h78h502x0z6v07f0j6nxx866nna7qc9ipsxw8rsfybwh24q"))))
     (build-system pyproject-build-system)
     (arguments
      (list
@@ -54,15 +54,21 @@ from.")
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'use-guix-espeak-ng
-            ;; ctypes.util.find_library cannot see store paths, so make the
-            ;; default library our espeak-ng.  PHONEMIZER_ESPEAK_LIBRARY and
+            ;; ctypes.util.find_library cannot see store paths, so have
+            ;; _find_library resolve espeak-ng to ours.  Patching inside
+            ;; _find_library (rather than at its call site) keeps tests that
+            ;; stub it out meaningful.  PHONEMIZER_ESPEAK_LIBRARY and
             ;; set_library() still take precedence.
             (lambda* (#:key inputs #:allow-other-keys)
               (substitute* "phonemizer/backend/espeak/wrapper.py"
-                (("_find_library\\(\"espeak-ng\"\\)")
-                 (format #f "~s"
-                         (search-input-file inputs
-                                            "lib/libespeak-ng.so")))))))))
+                (("( *)return ctypes\\.util\\.find_library\\(libname\\)"
+                  all indent)
+                 (string-append
+                  indent "if libname == \"espeak-ng\":\n"
+                  indent "    return "
+                  (format #f "~s"
+                          (search-input-file inputs "lib/libespeak-ng.so"))
+                  "\n" all))))))))
     (native-inputs (list python-pytest python-setuptools python-wheel))
     (inputs (list espeak-ng))
     (propagated-inputs
