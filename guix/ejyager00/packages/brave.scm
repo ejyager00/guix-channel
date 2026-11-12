@@ -27,7 +27,7 @@
 (define-public brave-origin-bin
   (package
     (name "brave-origin-bin")
-    (version "1.99.55")
+    (version "1.99.56")
     (source
      (origin
        (method url-fetch)
@@ -35,7 +35,7 @@
              "https://github.com/brave/brave-browser/releases/download/v"
              version "/brave-origin_" version "_amd64.deb"))
        (sha256
-        (base32 "0szwjcbx62v1bfxi2kr1i2v66pyb1bvj694cbf2my87w1y6s86b3"))))
+        (base32 "1bvvcw1aq38zrzf5kbjjyigccv18vm0j5cxk6bypdpmsphsqpadm"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
