@@ -9,14 +9,14 @@
 (define-public nb
   (package
     (name "nb")
-    (version "7.25.5")
+    (version "7.25.6")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/xwmx/nb")
              (commit version)))
-       (sha256 (base32 "1234wnha283n674z75qdp9hn4f49gn7g2kbsdi4pabl4j10s6ksg"))))
+       (sha256 (base32 "15pgdc3fy7lis9z8sgi18p0wdmisfr584pc9brhql9mid3ixiaxl"))))
     (build-system copy-build-system)
     (arguments
      (list #:install-plan
